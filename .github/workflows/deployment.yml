@@ -55,12 +55,12 @@ jobs:
       - name: Deploy Dev Stacks
         if: "!contains(github.ref,'main')"
         run: |
-          STAGE=dev cdk deploy grocery-list-stack-dev --require-approval never
+          STAGE=dev cdk deploy pinpoint-email-service-dev --require-approval never
 
       - name: Deploy Main Stacks
         if: contains(github.ref,'main')
         run: |
-          STAGE=main cdk deploy grocery-list-stack-main --require-approval never
+          STAGE=main cdk deploy pinpoint-email-service-main --require-approval never
 
   # Destroy:
   #   runs-on: ubuntu-latest
