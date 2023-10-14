@@ -2,6 +2,7 @@ import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as apigwv2 from "@aws-cdk/aws-apigatewayv2-alpha";
+import * as lambda from "aws-cdk-lib/aws-lambda";
 
 export class AwsPinpointEmailServiceStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -24,5 +25,20 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
         allowOrigins: ["*"],
       },
     });
+
+    const pinpointSendEmailLambda = new lambda.Function(
+      this,
+      `${service}-${stage}-send-email-lambda`,
+      {
+        functionName: `${service}-${stage}-send-email-lambda`,
+        runtime: lambda.Runtime.NODEJS_18_X,
+        code: lambda.Code.fromAsset("lambda"),
+        handler: "SendEmail.handler",
+        environment: {
+          FROM_EMAIL: "raofahad046@gmail.com",
+          TO_EMAIL: "fahad.rao@livecart.ai",
+        },
+      }
+    );
   }
 }
