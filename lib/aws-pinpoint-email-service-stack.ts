@@ -3,6 +3,7 @@ import { Construct } from "constructs";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as apigwv2 from "@aws-cdk/aws-apigatewayv2-alpha";
 import * as lambda from "aws-cdk-lib/aws-lambda";
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 export class AwsPinpointEmailServiceStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -39,6 +40,14 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
           TO_EMAIL: "fahad.rao@livecart.ai",
         },
       }
+    );
+
+    pinpointSendEmailLambda.addToRolePolicy(
+      new PolicyStatement({
+        effect: Effect.ALLOW,
+        actions: ["ses:SendEmail", "ses:SendRawEmail", "ses:SendTemplatedEmail"],
+        resources: ["*"],
+      })
     );
   }
 }
