@@ -4,6 +4,7 @@ import * as s3 from "aws-cdk-lib/aws-s3";
 import * as apigwv2 from "@aws-cdk/aws-apigatewayv2-alpha";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import * as apigwv2_integrations from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
 
 export class AwsPinpointEmailServiceStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -48,6 +49,11 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
         actions: ["ses:SendEmail", "ses:SendRawEmail", "ses:SendTemplatedEmail"],
         resources: ["*"],
       })
+    );
+
+    const pinpointSendEmailLambdaIntegration = new apigwv2_integrations.HttpLambdaIntegration(
+      `${service}-${stage}-send-email-lambda-integration`,
+      pinpointSendEmailLambda
     );
   }
 }
