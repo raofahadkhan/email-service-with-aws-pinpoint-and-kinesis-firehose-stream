@@ -6,14 +6,14 @@ const dynamodb = new AWS.DynamoDB.DocumentClient();
 // import { v4 as uuidv4 } from "uuid";
 
 export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
-  if (!event.body) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ message: "Body is missing" }),
-    };
-  }
+//   if (!event.body) {
+//     return {
+//       statusCode: 400,
+//       body: JSON.stringify({ message: "Body is missing" }),
+//     };
+//   }
 
-  const requestBody = JSON.parse(event.body);
+//   const requestBody = JSON.parse(event.body);
   //   const user_id: string = requestBody.user_id;
   //   const feedback_id: string = uuidv4();
   //   const feedback_message: string = requestBody.feedback;
