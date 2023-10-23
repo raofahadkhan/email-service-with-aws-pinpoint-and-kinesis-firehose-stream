@@ -6,6 +6,7 @@ import * as lambda from "aws-cdk-lib/aws-lambda";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import * as apigwv2_integrations from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
 import * as pinpoint from "aws-cdk-lib/aws-pinpoint";
+import * as pinpointemail from "aws-cdk-lib/aws-pinpointemail";
 
 export class AwsPinpointEmailServiceStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -31,6 +32,13 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
 
     const pinpointEmailApp = new pinpoint.CfnApp(this, `${service}-${stage}-project`, {
       name: `${service}-${stage}-project`,
+    });
+
+    const emailChannel = new pinpoint.CfnEmailChannel(this, `${service}-${stage}-email-channel`, {
+      applicationId: pinpointEmailApp.ref,
+      enabled: true,
+      fromAddress: "raofahad046@gmail.com",
+      identity: "arn:aws:ses:us-east-1:961322954791:identity/raofahad046@gmail.com",
     });
 
     const pinpointSendEmailLambda = new lambda.Function(
