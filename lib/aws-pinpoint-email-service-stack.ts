@@ -110,7 +110,7 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
     );
 
     // ===============================================================================
-    // KINESIS: CREATED KINESIS FIREHOSE DELIVERY STREAM
+    // DELIVERY STREAM: CREATED KINESIS FIREHOSE DELIVERY STREAM
     // ===============================================================================
 
     const firehoseStream = new firehose.CfnDeliveryStream(
