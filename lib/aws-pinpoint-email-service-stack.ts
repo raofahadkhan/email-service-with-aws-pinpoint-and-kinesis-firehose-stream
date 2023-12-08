@@ -57,7 +57,8 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
       {
         assumedBy: new iam.CompositePrincipal(
           new iam.ServicePrincipal("pinpoint.amazonaws.com"),
-          new iam.ServicePrincipal("lambda.amazonaws.com")
+          new iam.ServicePrincipal("lambda.amazonaws.com"),
+          new iam.ServicePrincipal("firehose.amazonaws.com")
         ),
 
         managedPolicies: [
