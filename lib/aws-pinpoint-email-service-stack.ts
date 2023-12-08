@@ -47,7 +47,16 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
       this,
       `${service}-${stage}-pinpoint-role`,
       {
-        assumedBy: new iam.ServicePrincipal("pinpoint.amazonaws.com"),
+        assumedBy: new iam.CompositePrincipal(
+          new iam.ServicePrincipal("pinpoint.amazonaws.com"),
+          new iam.ServicePrincipal("lambda.amazonaws.com")
+        ),
+
+        managedPolicies: [
+          iam.ManagedPolicy.fromAwsManagedPolicyName(
+            "service-role/AWSLambdaBasicExecutionRole"
+          ),
+        ],
       }
     );
 
