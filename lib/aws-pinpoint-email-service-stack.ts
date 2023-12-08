@@ -5,6 +5,7 @@ import * as iam from "aws-cdk-lib/aws-iam";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as pinpoint from "aws-cdk-lib/aws-pinpoint";
 import * as s3 from "aws-cdk-lib/aws-s3";
+import * as firehose from "aws-cdk-lib/aws-kinesisfirehose";
 import { Construct } from "constructs";
 
 export class AwsPinpointEmailServiceStack extends cdk.Stack {
@@ -70,7 +71,11 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
     pinpoint_role.addToPolicy(
       new iam.PolicyStatement({
         effect: iam.Effect.ALLOW,
-        actions: ["mobiletargeting:SendMessages"],
+        actions: [
+          "mobiletargeting:SendMessages",
+          "firehose:PutRecord",
+          "firehose:PutRecordBatch",
+        ],
         resources: ["*"],
       })
     );
