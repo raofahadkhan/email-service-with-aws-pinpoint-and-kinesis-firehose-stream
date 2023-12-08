@@ -19,6 +19,10 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
     //   removalPolicy: cdk.RemovalPolicy.DESTROY,
     // });
 
+    // ===============================================================================
+    // CREATED HTTP API FOR SENDING EMAILS THROUGH PINPOINT
+    // ===============================================================================
+
     const pinpointEmailApi = new apigwv2.HttpApi(
       this,
       `${service}-${stage}-api`,
@@ -35,6 +39,10 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
       }
     );
 
+    // ===============================================================================
+    // CREATED A PINPOINT APP FOR SENDING EMAILS
+    // ===============================================================================
+
     const pinpointEmailApp = new pinpoint.CfnApp(
       this,
       `${service}-${stage}-project`,
@@ -42,6 +50,10 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
         name: `${service}-${stage}-project`,
       }
     );
+
+    // ===============================================================================
+    // CREATED A PINPOINT EMAIL CHANNEL
+    // ===============================================================================
 
     const emailChannel = new pinpoint.CfnEmailChannel(
       this,
@@ -54,6 +66,10 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
           "arn:aws:ses:us-east-1:961322954791:identity/raofahad046@gmail.com",
       }
     );
+
+    // ===============================================================================
+    // LAMBDA: CREATED LAMBDA FUNCTION FOR PINPOINT EMAIL SERVICE
+    // ===============================================================================
 
     const pinpointSendEmailLambda = new lambda.Function(
       this,
@@ -70,17 +86,29 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
       }
     );
 
+    // ===============================================================================
+    // CREATED HTTP API INTEGRATIONS WITH API-GATEWAY
+    // ===============================================================================
+
     const pinpointSendEmailLambdaIntegration =
       new apigwv2_integrations.HttpLambdaIntegration(
         `${service}-${stage}-send-email-lambda-integration`,
         pinpointSendEmailLambda
       );
 
+    // ===============================================================================
+    // CREATED ROUTE FOR LAMBDA FUNCTION
+    // ===============================================================================
+
     pinpointEmailApi.addRoutes({
       path: "/",
       methods: [apigwv2.HttpMethod.POST],
       integration: pinpointSendEmailLambdaIntegration,
     });
+
+    // ===============================================================================
+    // OUTPUT STATEMENTS FOR OUTPUT URLS AND ARNS
+    // ===============================================================================
 
     new cdk.CfnOutput(this, `${service}-${stage}-feedback-api-endpoint`, {
       value: pinpointEmailApi.url!,
