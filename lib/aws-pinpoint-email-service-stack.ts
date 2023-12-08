@@ -121,7 +121,7 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
         extendedS3DestinationConfiguration: {
           bucketArn: pinpointEmailsInsightsBuckets.bucketArn,
           bufferingHints: {
-            intervalInSeconds: 10,
+            intervalInSeconds: 60,
             sizeInMBs: 50,
           },
           roleArn: pinpoint_role.roleArn,
