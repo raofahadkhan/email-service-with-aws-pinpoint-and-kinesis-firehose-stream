@@ -84,9 +84,9 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
     // CREATED A PINPOINT EMAIL CHANNEL
     // ===============================================================================
 
-    const emailChannel = new pinpoint.CfnEmailChannel(
+    new pinpoint.CfnEmailChannel(
       this,
-      `${service}-${stage}-email-channel`,
+      `${service}-${stage}-pinpoint-email-channel`,
       {
         applicationId: pinpointEmailApp.ref,
         enabled: true,
