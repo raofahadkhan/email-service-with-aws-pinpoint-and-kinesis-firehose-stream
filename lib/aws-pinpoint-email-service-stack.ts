@@ -119,7 +119,6 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
         role: pinpoint_role,
         environment: {
           FROM_EMAIL: "raofahad046@gmail.com",
-          TO_EMAIL: "raofahadaws@gmail.com",
           APP_ID: pinpointEmailApp.ref,
         },
       }

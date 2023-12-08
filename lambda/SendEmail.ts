@@ -6,16 +6,29 @@ const pinpoint = new Pinpoint();
 export const handler = async (
   event: APIGatewayProxyEventV2
 ): Promise<APIGatewayProxyResultV2> => {
-  const TO_EMAIL: string = process.env.TO_EMAIL!;
+  // CHECKING IF THE BODY IS EMPTY OR NOT
+  if (!event.body) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: "Body not provided!" }),
+    };
+  }
+
+  // PARSED THE BODY CONTENTS
+  const requestBody = JSON.parse(event.body);
+
+  // EXTRACTED THE DESIRED DATA FROM BODY AND LAMBDA ENVIRONMENT
+  const TO_EMAIL: string = requestBody.email;
   const FROM_EMAIL: string = process.env.FROM_EMAIL!;
   const applicationId: string = process.env.APP_ID!;
   const emailSubject: string = "Pinpoint Testing Email";
 
+  // PINPOINT PARAMS FOR SENGING EMAIL
   const paramsForEmail = {
     ApplicationId: applicationId,
     MessageRequest: {
       Addresses: {
-        [FROM_EMAIL]: { ChannelType: "EMAIL" },
+        [TO_EMAIL]: { ChannelType: "EMAIL" },
       },
       MessageConfiguration: {
         EmailMessage: {
@@ -29,7 +42,7 @@ export const handler = async (
               Data: emailSubject,
             },
           },
-          FromAddress: TO_EMAIL,
+          FromAddress: FROM_EMAIL,
         },
       },
     },
