@@ -53,11 +53,11 @@ jobs:
 
       # DEPLOYMENT
       - name: Deploy Dev Stacks
-        if: "!contains(github.ref,'main')"
+        if: contains(github.ref,'dev')
         run: |
-          STAGE=dev cdk deploy pinpoint-email-service-dev --require-approval never
+          STAGE=dev cdk deploy pinpoint-email-service-d --require-approval never
 
       - name: Deploy Main Stacks
         if: contains(github.ref,'main')
         run: |
-          STAGE=main cdk deploy pinpoint-email-service-main --require-approval never
+          STAGE=main cdk deploy pinpoint-email-service-m --require-approval never

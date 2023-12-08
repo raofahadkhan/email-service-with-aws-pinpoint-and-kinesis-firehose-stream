@@ -7,7 +7,7 @@ const service = "pinpoint-email-service";
 let stage;
 const app = new cdk.App();
 
-stage = "main";
+stage = "m";
 new AwsPinpointEmailServiceStack(app, `${service}-${stage}`, {
   tags: {
     service,
@@ -15,7 +15,7 @@ new AwsPinpointEmailServiceStack(app, `${service}-${stage}`, {
   },
 });
 
-stage = "dev";
+stage = "d";
 new AwsPinpointEmailServiceStack(app, `${service}-${stage}`, {
   tags: {
     service,
