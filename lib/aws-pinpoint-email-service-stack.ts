@@ -3,7 +3,7 @@ import { Construct } from "constructs";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as apigwv2 from "@aws-cdk/aws-apigatewayv2-alpha";
 import * as lambda from "aws-cdk-lib/aws-lambda";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import * as iam from "aws-cdk-lib/aws-iam";
 import * as apigwv2_integrations from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
 import * as pinpoint from "aws-cdk-lib/aws-pinpoint";
 import * as pinpointemail from "aws-cdk-lib/aws-pinpointemail";
@@ -40,6 +40,25 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
     );
 
     // ===============================================================================
+    // CREATED IAM POLICIES FOR PINPOINT
+    // ===============================================================================
+
+    const pinpoint_role = new iam.Role(
+      this,
+      `${service}-${stage}-pinpoint-role`,
+      {
+        assumedBy: new iam.ServicePrincipal("pinpoint.amazonaws.com"),
+      }
+    );
+
+    pinpoint_role.addToPolicy(
+      new iam.PolicyStatement({
+        actions: ["mobiletargeting:SendMessages"],
+        resources: ["*"],
+      })
+    );
+
+    // ===============================================================================
     // CREATED A PINPOINT APP FOR SENDING EMAILS
     // ===============================================================================
 
@@ -64,6 +83,7 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
         fromAddress: "raofahad046@gmail.com",
         identity:
           "arn:aws:ses:us-east-1:961322954791:identity/raofahad046@gmail.com",
+        roleArn: pinpoint_role.roleArn,
       }
     );
 
