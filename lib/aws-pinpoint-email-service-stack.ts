@@ -130,6 +130,20 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
     );
 
     // ===============================================================================
+    // EVENT STREAM: CREATED PINPOINT EVENT STREAM TO SEND EVENTS TO KINESIS STREAM
+    // ===============================================================================
+
+    new pinpoint.CfnEventStream(
+      this,
+      `${service}-${stage}-pinpoint-event-stream`,
+      {
+        applicationId: pinpointEmailApp.ref,
+        destinationStreamArn: firehoseStream.attrArn,
+        roleArn: pinpoint_role.roleArn,
+      }
+    );
+
+    // ===============================================================================
     // LAMBDA: CREATED LAMBDA FUNCTION FOR PINPOINT EMAIL SERVICE
     // ===============================================================================
 
