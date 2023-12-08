@@ -13,33 +13,47 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
     super(scope, id, props);
     const { service, stage } = props?.tags!;
 
-    const pinpointEmailsInsightsBuckets = new s3.Bucket(this, `${service}-${stage}-bucket`, {
-      bucketName: `${service}-${stage}-bucket`,
-      versioned: true,
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
-    });
+    // const pinpointEmailsInsightsBuckets = new s3.Bucket(this, `${service}-${stage}-bucket`, {
+    //   bucketName: `${service}-${stage}-bucket`,
+    //   versioned: true,
+    //   removalPolicy: cdk.RemovalPolicy.DESTROY,
+    // });
 
-    const pinpointEmailApi = new apigwv2.HttpApi(this, `${service}-${stage}-api`, {
-      apiName: `${service}-${stage}-api`,
-      description: "This api is responsible for sending emails with pinpoint.",
-      corsPreflight: {
-        allowHeaders: ["Content-Type"],
-        allowMethods: [apigwv2.CorsHttpMethod.POST],
-        allowCredentials: false,
-        allowOrigins: ["*"],
-      },
-    });
+    const pinpointEmailApi = new apigwv2.HttpApi(
+      this,
+      `${service}-${stage}-api`,
+      {
+        apiName: `${service}-${stage}-api`,
+        description:
+          "This api is responsible for sending emails with pinpoint.",
+        corsPreflight: {
+          allowHeaders: ["Content-Type"],
+          allowMethods: [apigwv2.CorsHttpMethod.POST],
+          allowCredentials: false,
+          allowOrigins: ["*"],
+        },
+      }
+    );
 
-    const pinpointEmailApp = new pinpoint.CfnApp(this, `${service}-${stage}-project`, {
-      name: `${service}-${stage}-project`,
-    });
+    const pinpointEmailApp = new pinpoint.CfnApp(
+      this,
+      `${service}-${stage}-project`,
+      {
+        name: `${service}-${stage}-project`,
+      }
+    );
 
-    const emailChannel = new pinpoint.CfnEmailChannel(this, `${service}-${stage}-email-channel`, {
-      applicationId: pinpointEmailApp.ref,
-      enabled: true,
-      fromAddress: "raofahad046@gmail.com",
-      identity: "arn:aws:ses:us-east-1:961322954791:identity/raofahad046@gmail.com",
-    });
+    const emailChannel = new pinpoint.CfnEmailChannel(
+      this,
+      `${service}-${stage}-email-channel`,
+      {
+        applicationId: pinpointEmailApp.ref,
+        enabled: true,
+        fromAddress: "raofahad046@gmail.com",
+        identity:
+          "arn:aws:ses:us-east-1:961322954791:identity/raofahad046@gmail.com",
+      }
+    );
 
     const pinpointSendEmailLambda = new lambda.Function(
       this,
@@ -51,23 +65,16 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
         handler: "SendEmail.handler",
         environment: {
           FROM_EMAIL: "raofahad046@gmail.com",
-          TO_EMAIL: "fahad.rao@livecart.ai",
+          TO_EMAIL: "raofahadaws@gmail.com",
         },
       }
     );
 
-    pinpointSendEmailLambda.addToRolePolicy(
-      new PolicyStatement({
-        effect: Effect.ALLOW,
-        actions: ["ses:SendEmail", "ses:SendRawEmail", "ses:SendTemplatedEmail"],
-        resources: ["*"],
-      })
-    );
-
-    const pinpointSendEmailLambdaIntegration = new apigwv2_integrations.HttpLambdaIntegration(
-      `${service}-${stage}-send-email-lambda-integration`,
-      pinpointSendEmailLambda
-    );
+    const pinpointSendEmailLambdaIntegration =
+      new apigwv2_integrations.HttpLambdaIntegration(
+        `${service}-${stage}-send-email-lambda-integration`,
+        pinpointSendEmailLambda
+      );
 
     pinpointEmailApi.addRoutes({
       path: "/",
