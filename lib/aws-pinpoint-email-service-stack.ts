@@ -100,7 +100,7 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
         runtime: lambda.Runtime.NODEJS_18_X,
         code: lambda.Code.fromAsset("lambda"),
         handler: "SendEmail.handler",
-        // role: pinpoint_role,
+        role: pinpoint_role,
         environment: {
           FROM_EMAIL: "raofahad046@gmail.com",
           TO_EMAIL: "raofahadaws@gmail.com",
