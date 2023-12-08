@@ -53,6 +53,7 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
 
     pinpoint_role.addToPolicy(
       new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
         actions: ["mobiletargeting:SendMessages"],
         resources: ["*"],
       })
