@@ -1,23 +1,30 @@
-import * as cdk from "aws-cdk-lib";
-import { Construct } from "constructs";
-import * as s3 from "aws-cdk-lib/aws-s3";
 import * as apigwv2 from "@aws-cdk/aws-apigatewayv2-alpha";
-import * as lambda from "aws-cdk-lib/aws-lambda";
-import * as iam from "aws-cdk-lib/aws-iam";
 import * as apigwv2_integrations from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
+import * as cdk from "aws-cdk-lib";
+import * as iam from "aws-cdk-lib/aws-iam";
+import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as pinpoint from "aws-cdk-lib/aws-pinpoint";
-import * as pinpointemail from "aws-cdk-lib/aws-pinpointemail";
+import * as s3 from "aws-cdk-lib/aws-s3";
+import { Construct } from "constructs";
 
 export class AwsPinpointEmailServiceStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
     const { service, stage } = props?.tags!;
 
-    // const pinpointEmailsInsightsBuckets = new s3.Bucket(this, `${service}-${stage}-bucket`, {
-    //   bucketName: `${service}-${stage}-bucket`,
-    //   versioned: true,
-    //   removalPolicy: cdk.RemovalPolicy.DESTROY,
-    // });
+    // ===============================================================================
+    // S3: CREATED S3 BUCKET FOR SAVING PINPOINT EMAIL INSIGHTS DATA
+    // ===============================================================================
+
+    const pinpointEmailsInsightsBuckets = new s3.Bucket(
+      this,
+      `${service}-${stage}-pinpoint-email-bucket`,
+      {
+        bucketName: `${service}-${stage}-pinpoint-email-bucket`,
+        versioned: true,
+        removalPolicy: cdk.RemovalPolicy.DESTROY,
+      }
+    );
 
     // ===============================================================================
     // CREATED HTTP API FOR SENDING EMAILS THROUGH PINPOINT
