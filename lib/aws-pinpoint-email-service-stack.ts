@@ -122,7 +122,7 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
     // ===============================================================================
 
     pinpointEmailApi.addRoutes({
-      path: "/",
+      path: "/send-email",
       methods: [apigwv2.HttpMethod.POST],
       integration: pinpointSendEmailLambdaIntegration,
     });
