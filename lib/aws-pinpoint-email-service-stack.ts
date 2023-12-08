@@ -110,6 +110,26 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
     );
 
     // ===============================================================================
+    // KINESIS: CREATED KINESIS FIREHOSE DELIVERY STREAM
+    // ===============================================================================
+
+    const firehoseStream = new firehose.CfnDeliveryStream(
+      this,
+      `${service}-${stage}-firehose-delivery-stream`,
+      {
+        deliveryStreamType: "DirectPut",
+        extendedS3DestinationConfiguration: {
+          bucketArn: pinpointEmailsInsightsBuckets.bucketArn,
+          bufferingHints: {
+            intervalInSeconds: 10,
+            sizeInMBs: 50,
+          },
+          roleArn: pinpoint_role.roleArn,
+        },
+      }
+    );
+
+    // ===============================================================================
     // LAMBDA: CREATED LAMBDA FUNCTION FOR PINPOINT EMAIL SERVICE
     // ===============================================================================
 
