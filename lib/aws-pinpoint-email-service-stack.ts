@@ -131,7 +131,7 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
           bucketArn: pinpointEmailsInsightsBuckets.bucketArn,
           bufferingHints: {
             intervalInSeconds: 60,
-            sizeInMBs: 1,
+            sizeInMBs: 5,
           },
           roleArn: pinpoint_role.roleArn,
         },
