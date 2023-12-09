@@ -81,6 +81,14 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
       })
     );
 
+    pinpoint_role.addToPolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ["s3:PutObject"],
+        resources: [pinpointEmailsInsightsBuckets.bucketArn],
+      })
+    );
+
     // ===============================================================================
     // CREATED A PINPOINT APP FOR SENDING EMAILS
     // ===============================================================================
