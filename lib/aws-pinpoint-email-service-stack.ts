@@ -86,7 +86,7 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
       new iam.PolicyStatement({
         effect: iam.Effect.ALLOW,
         actions: ["s3:PutObject"],
-        resources: [pinpointEmailsInsightsBuckets.bucketArn],
+        resources: ["*"],
       })
     );
 
