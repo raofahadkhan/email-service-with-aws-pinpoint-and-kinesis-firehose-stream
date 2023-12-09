@@ -76,6 +76,7 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
           "mobiletargeting:SendMessages",
           "firehose:PutRecord",
           "firehose:PutRecordBatch",
+          "IncomingRecords",
         ],
         resources: ["*"],
       })
