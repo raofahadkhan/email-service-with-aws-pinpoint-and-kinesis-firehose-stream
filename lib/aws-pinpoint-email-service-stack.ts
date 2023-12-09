@@ -48,7 +48,7 @@ export class AwsPinpointEmailServiceStack extends cdk.Stack {
     );
 
     // ===============================================================================
-    // CREATED IAM POLICIES FOR PINPOINT
+    // IAM: CREATED IAM POLICIES FOR PINPOINT AND KINESIS FIREHOSE STREAM
     // ===============================================================================
 
     const pinpoint_role = new iam.Role(
